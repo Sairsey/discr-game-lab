@@ -1,0 +1,7 @@
+<config version="0">
+	<services>
+		<service id="gmail" smtp_address="smtp.gmail.com" smtp_port="587" imap_address="imap.gmail.com" imap_port="993" />
+		<service id="outlook" smtp_address="smtp.office365.com" smtp_port="587" imap_address="outlook.office365.com" imap_port="993" />
+		<service id="yahoo" smtp_address="smtp.mail.yahoo.com" smtp_port="465" imap_address="imap.mail.yahoo.com" imap_port="993" />	
+	</services>
+</config>
