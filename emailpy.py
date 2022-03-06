@@ -211,9 +211,9 @@ class MailService:
                         #content:
                         if e_msg.is_multipart():                            
                             for payload in e_msg.get_payload():                            
-                                newEmsg.Body.append(str(payload.get_payload()))
+                                newEmsg.Body.append(payload.get_payload())
                         else:
-                            newEmsg.Body.append(str(e_msg.get_payload()))
+                            newEmsg.Body.append(e_msg.get_payload())
 
                         #attachments:
                         newEmsg.Attachments = []

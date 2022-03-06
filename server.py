@@ -3,6 +3,8 @@ import json
 import os
 import logging
 import re
+import email
+import base64
 
 logger = logging.getLogger('example_logger')
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -45,12 +47,26 @@ def main(fname = "bot.json"):
     # it has easy idea, and I belive that comments in theese functions is enough
     while True:
         try:
-            print('Another attempt to check EMAIL')
+            logger.info('Another attempt to check EMAIL')
             for msg in mail.read(criteria=emailpy.Constants.UNSEEN, download_attachments=True):
                 for fn in msg.Attachments:
                     logger.info("Attachment file name: " + fn)
                     match = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', msg.From)
                     proccess_attachment(fn, match[0])
+                    mail.send(match, msg.Subject, body="Ok, I got your`s email.")
+                if (len(msg.Attachments) == 0):
+                    logger.info("User registrantion.")
+                    match = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', msg.From)
+                    infos = dict()
+                    if os.path.exists("user_infos.json"):
+                        with open("user_infos.json", "r") as f:
+                            infos = json.loads(f.read())
+                    info = base64.b64decode(msg.Body[0]).decode('utf-8')
+                    infos[match[0]] = info
+                    logger.info("Registered " + match[0])
+                    with open("user_infos.json", "w") as f:
+                        f.write(json.dumps(infos))
+                    mail.send(match, msg.Subject, body="Hello!\r\nYour registration was successful. In attachment you can see template for a function", attachments = ["function_template.py"])                   
         except (KeyboardInterrupt):
             break
     logger.info('End of cursed cycle of code gathering')
